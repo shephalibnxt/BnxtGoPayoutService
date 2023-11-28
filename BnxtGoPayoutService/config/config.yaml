@@ -1,0 +1,19 @@
+portNumber : 8080
+host     : localhost
+port     : 5432
+user     : postgres
+password : root
+dbname : bharat_nxt
+
+#razorpay authentication credentials
+rp_username : rzp_test_VEDnILjUZdhx7B
+rp_password : x7GkvpdjSHa3eNSi1n7lowGN
+
+#razorpay url of create contact api
+razorpay_contact_url : https://api.razorpay.com/v1/contacts
+
+#razorpay url of func account api
+razorpay_fundaccount_url : https://api.razorpay.com/v1/fund_accounts
+
+#razorpay url of payout bank account
+razorpay_payout_url : https://api.razorpay.com/v1/payouts

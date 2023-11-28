@@ -1,0 +1,225 @@
+definitions:
+  entity.PayoutEvent:
+    properties:
+      account_id:
+        type: string
+      contains:
+        items:
+          type: string
+        type: array
+      created_at:
+        type: integer
+      entity:
+        type: string
+      event:
+        type: string
+      payload:
+        properties:
+          payout:
+            properties:
+              entity:
+                properties:
+                  amount:
+                    type: integer
+                  batch_id:
+                    type: string
+                  created_at:
+                    type: integer
+                  currency:
+                    type: string
+                  entity:
+                    type: string
+                  fee_type:
+                    type: string
+                  fees:
+                    type: integer
+                  fund_account_id:
+                    type: string
+                  id:
+                    type: string
+                  mode:
+                    type: string
+                  narration:
+                    type: string
+                  notes:
+                    additionalProperties:
+                      type: string
+                    type: object
+                  purpose:
+                    type: string
+                  reference_id:
+                    type: string
+                  status:
+                    type: string
+                  status_details:
+                    properties:
+                      description:
+                        type: string
+                      reason:
+                        type: string
+                      source:
+                        type: string
+                    type: object
+                  tax:
+                    type: integer
+                  utr:
+                    type: string
+                type: object
+            type: object
+        type: object
+    type: object
+  entity.RequestToContactApi:
+    properties:
+      payee_id:
+        type: integer
+      user_id:
+        type: integer
+    type: object
+  entity.RequestToFundAccountApi:
+    properties:
+      contact_id:
+        type: string
+    type: object
+  entity.RequestToPayoutAccount:
+    properties:
+      payee_id:
+        type: string
+      payment_id:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: Payout Service using gin framework
+  title: Payout Service
+  version: "1.0"
+paths:
+  /bnxt/createContact:
+    post:
+      consumes:
+      - application/json
+      description: Create a new contact based on provided payee id and user id.
+      operationId: create-contact
+      parameters:
+      - description: Request payload to create a contact
+        in: body
+        name: requestPayload
+        required: true
+        schema:
+          $ref: '#/definitions/entity.RequestToContactApi'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: successful response with contact details
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Error response when there is a bad request or an api error
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Create a new Contact
+      tags:
+      - Create Contact API
+  /bnxt/createFundAccount:
+    post:
+      consumes:
+      - application/json
+      description: Create a new fund account based on provided contact id
+      operationId: create-fund-account
+      parameters:
+      - description: Request payload to create a func account
+        in: body
+        name: requestFundAccountPayload
+        required: true
+        schema:
+          $ref: '#/definitions/entity.RequestToFundAccountApi'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful response with fund account details
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Error response when there is a bad request or an api error
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Create a new Fund Account
+      tags:
+      - Create Fund account API
+  /bnxt/createPayoutAccount:
+    post:
+      consumes:
+      - application/json
+      description: Create a new payout based on provided payment id and payee id
+      operationId: create-payout
+      parameters:
+      - description: Request payload to create a payout
+        in: body
+        name: createPayoutRequest
+        required: true
+        schema:
+          $ref: '#/definitions/entity.RequestToPayoutAccount'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: successful response with payout details
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Error response when there is a bad request or an api
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Create a new payout
+      tags:
+      - Create Payout API
+  /pendingEvent:
+    post:
+      consumes:
+      - application/json
+      description: Create a new Payout event
+      parameters:
+      - description: Payout Event Data
+        in: body
+        name: event
+        required: true
+        schema:
+          $ref: '#/definitions/entity.PayoutEvent'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/entity.PayoutEvent'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Create Payout Event
+      tags:
+      - Payout events
+swagger: "2.0"
